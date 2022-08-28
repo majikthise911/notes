@@ -162,14 +162,14 @@ class PyChain:
         block = self.proof_of_work(candidate_block) 
         # add the block to the chain. use the += operator to add the block to the chain
         self.chain += [block] 
-""" 
-    This next block of code is where we will be validating the chain 
-        We will be validating the integrity of the PyChain by
-        comparing the calculated hash code of each block to the `prev_hash`
-        value contained in the following block
-        Add the code to generate the hash of the first block in the chain.
-        Set the hash equal to a variable called block_hash
-        Note: The first block in the chain is at index position 0. """
+
+#     This next block of code is where we will be validating the chain 
+#         We will be validating the integrity of the PyChain by
+#         comparing the calculated hash code of each block to the `prev_hash`
+#         value contained in the following block
+#         Add the code to generate the hash of the first block in the chain.
+#         Set the hash equal to a variable called block_hash
+#         Note: The first block in the chain is at index position 0. """
 
     def is_valid(self):
         block_hash = self.chain[0].hash_block() #hash the first block in the chain  
@@ -179,7 +179,7 @@ class PyChain:
 
 
         #the remainder of the blocks in the chain, starting from index 1
-        for block in self.chain[1:]: 
+        for block in self.chain[1:]: #[1:] means all of the blocks in the chain starting from index 1
 
             # Code an if statement that compares the block_hash of the
             # previous block to the prev_hash value of the current block
@@ -198,51 +198,42 @@ class PyChain:
         return True
 
 ################################################################################
-# Step 3:
+################################################################################
+# Step 3: STREAMLIT
 
-""" Add Relevant User Inputs to the Streamlit Interface
-Code additional input areas for the user interface of your Streamlit
-application. Create these input areas to capture the sender, receiver, and
-amount for each transaction that you’ll store in the `Block` record.
-To do so, complete the following steps:
-1. Add an input area where you can get a value for `sender` from the user.
-2. Add an input area where you can get a value for `receiver` from the user.
-3. Add an input area where you can get a value for `amount` from the user.
-4. As part of the Add Block button functionality, update `new_block` so that 
-`Block` consists of an attribute named `record`, which is set equal to a `Record` 
- that contains the `sender`, `receiver`, and `amount` values. The updated `Block`should also 
- include the attributes for `creator_id` and `prev_hash`.
- Since this video is really more on the technical side, I will not be going into detail 
- on how to add the input areas to the Streamlit interface.
- """
+# Hello everyone, My name is jordan clayton from Freqs and this is the video that I promised I would make at the end of 
+# my last video. 
+
+# this will be on coding the front end streamlit web app we used to demonstrate the blockchain coded in the last video. 
+# We left off at the Pychain class where we linked the blocks together in a chain and put in proof of work and validatioon 
+# fns 
 
 # Streamlit Code
 
 # Add the cache decorator for Streamlit
+# read st.cache from docs from: https://docs.streamlit.io/library/api-reference/performance/st.cache
 # allow output mutation is set to true because we are going to be changing the chain
-@st.cache(allow_output_mutation=True) 
+@st.cache(allow_output_mutation=True) # this is similar to saying allow the output to be mutated or changed
 def setup():
-    print("Initializing Chain")
+    # Lets put in an initializing message
+    print("Initializing Chain") 
     # create a new instance of the PyChain class and pass it a list of Block objects. 
     # the first block in the list is the genesis block
-    return PyChain([Block("Genesis", 0)]) 
+    return PyChain([Block("Genesis", 0)]) #[Block("Genesis", 0)] is saying that the first block 
+                                          # in the chain (index 0) is the genesis block
+# Lets add a main header to the app called Pychain 
+st.markdown("# PyChain") 
+# Then we will add a sub header to give a little more context to the app
+st.markdown("## Store a Transaction Record in the Chain") 
 
-
-st.markdown("# PyChain")
-st.markdown("## Store a Transaction Record in the PyChain")
-
-pychain = setup()
+# this is calling the setup function and storing the result in a variable called pychain
+pychain = setup() 
 
 ################################################################################
-
-
 # Add an input area where you can get a value for `sender` from the user.
 sender = st.text_input("Sender Info")
-
 # Add an input area where you can get a value for `receiver` from the user.
 receiver = st.text_input("Receiver Info")
-
-
 # Add an input area where you can get a value for `amount` from the user.
 amount = st.number_input("Amount")
 
@@ -251,7 +242,6 @@ if st.button("Add Block"):
     prev_block = pychain.chain[-1] 
     # get the hash of the last block in the chain
     prev_block_hash = prev_block.hash_block() 
- 
     # Update `new_block` so that `Block` consists of an attribute named `record`
     # which is set equal to a `Record` that contains the `sender`, `receiver`,
     # and `amount` values
@@ -261,29 +251,30 @@ if st.button("Add Block"):
         creator_id=42, 
         prev_hash=prev_block_hash
     )
-
     pychain.add_block(new_block)
     st.balloons()
 ################################################################################
 # Streamlit Code (continues)
 
-st.markdown("## The PyChain Ledger")
+st.markdown("## The PyChain Ledger") # this is a sub header for the area where we will be displaying the ledger
 
-pychain_df = pd.DataFrame(pychain.chain).astype(str)
-st.write(pychain_df)
+# define a new dataframe variable and pass pychain.chain which we defined above. pychain is the variable that stores the setup function that is composed of the chain of blocks
+# # .chain is the attribute that we are accessing that was defined in the PyChain class as a list of block objects
+pychain_df = pd.DataFrame(pychain.chain).astype(str) # this is saying that we want to convert the chain of blocks to a dataframe and then convert the dataframe to a string
+st.write(pychain_df) # this is saying that we want to write the dataframe to the streamlit app
 
 difficulty = st.sidebar.slider("Block Difficulty", 1, 5, 2) # block difficulty slider of min value, max value, and starting value 
 pychain.difficulty = difficulty # set the difficulty of the chain to the value of the slider
 
-st.sidebar.write("# Block Inspector")
+st.sidebar.write("# Block Inspector") # this is a sub header for the area where we will be displaying the block inspector
 selected_block = st.sidebar.selectbox(
-    "Which block would you like to see?", pychain.chain
+    "Which block would you like to see?", pychain.chain # this is a select box that allows the user to select a block from the chain
 )
 
-st.sidebar.write(selected_block)
+st.sidebar.write(selected_block) # this is saying that we want to write the selected block to the streamlit app
 
-if st.button("Validate Chain"):
-    st.write(pychain.is_valid())
+if st.button("Validate Chain"): # this is a button that allows the user to validate the chain
+    st.write(pychain.is_valid()) # this is saying that we want to write the result of the validation function to the streamlit app
 
 ################################################################################
 # Step 4:
