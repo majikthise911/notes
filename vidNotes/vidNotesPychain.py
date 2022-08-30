@@ -3,7 +3,6 @@ This will be part 1 of a two part series. Part 2 will pick up exactly where part
 
 
 
-# addition for commit 
 
 We are going to follow a few main steps during this process
 
