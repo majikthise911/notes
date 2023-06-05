@@ -18,3 +18,6 @@ These movements, while seemingly disparate, have one thing in common: they chall
 As these movements continue to grow and evolve, the Eridani civilization finds itself at a crossroads. Will they cling to their old ways, or will they embrace change? Will they fracture under the weight of their differences, or will they find strength in their diversity?
 
 The story of the Eridani is not just a story of a civilization; it's a story of change, of evolution, and of the enduring spirit of exploration. It's a macro story of the galaxy, a story that continues to unfold across the vast expanse of the cosmos.
+
+
+prep for pad for substation - brazos 
